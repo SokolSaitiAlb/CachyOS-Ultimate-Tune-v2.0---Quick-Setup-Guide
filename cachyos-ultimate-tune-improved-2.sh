@@ -1,0 +1,443 @@
+#!/bin/bash
+
+################################################################################
+# CachyOS ULTIMATE GAMING TUNER v2.0
+# For RX 6800 + KDE + Limine + BORE Kernel + LACT GPU Management
+# By Alb Kestrel (Improved Version)
+################################################################################
+
+set -e
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+echo -e "${BLUE}🔧 Starting CachyOS Ultimate Tune v2.0...${NC}"
+
+# ===========================
+# CHECK & INSTALL ZENITY
+# ===========================
+if ! command -v zenity &> /dev/null; then
+    echo -e "${YELLOW}🧩 Installing Zenity GUI support...${NC}"
+    pacman -S --noconfirm zenity
+fi
+
+# ===========================
+# REQUIRE ROOT
+# ===========================
+if [ $EUID -ne 0 ]; then
+    echo -e "${RED}🚫 Please run as root (sudo ./cachyos-ultimate-tune-improved.sh)${NC}"
+    exit 1
+fi
+
+# ===========================
+# ZENITY FEATURE SELECTION MENU
+# ===========================
+choices=$(zenity --list --checklist \
+    --title="CachyOS Gaming Setup v2.0" \
+    --width=700 --height=700 \
+    --text="Select the features you want to enable:" \
+    --column="Enable" --column="Feature" \
+    TRUE "Install YAY AUR helper" \
+    TRUE "Install Gaming & Dev Tools (Steam, Wine, OBS, KDEnlive, etc)" \
+    TRUE "Enable BORE Scheduler Kernel (linux-cachyos-bore)" \
+    TRUE "Install LACT GPU Management (RX 6800 OC)" \
+    TRUE "Enable MangoHud + GameMode" \
+    TRUE "Install ProtonPlus (ProtonUp-Qt replacement)" \
+    TRUE "Apply Limine Bootloader (2 sec timeout)" \
+    FALSE "Install SDDM Astronaut Theme" \
+    FALSE "Install SDDM Pixie Theme" \
+    FALSE "Install SDDM Pixel UI Theme" \
+    FALSE "Setup Btrfs Snapshots & cachy-update" \
+    FALSE "Install OpenRGB for RGB Control" \
+    FALSE "Install KDE Gaming Layout (Latte Dock)" \
+    2>&1)
+
+exit_code=$?
+if [ $exit_code -ne 0 ]; then
+    echo -e "${YELLOW}Installation cancelled by user${NC}"
+    exit 0
+fi
+
+# Convert string to array
+IFS="|" read -r -a features <<< "$choices"
+
+# ===========================
+# HELPER FUNCTION
+# ===========================
+feature_enabled() {
+    local feature_name="$1"
+    for feature in "${features[@]}"; do
+        if [ "$feature" = "$feature_name" ]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+# ===========================
+# 1. INSTALL YAY (AUR Helper)
+# ===========================
+if feature_enabled "Install YAY AUR helper"; then
+    echo -e "${BLUE}📦 Installing YAY AUR helper...${NC}"
+    
+    if ! command -v yay &> /dev/null; then
+        pacman -S --needed --noconfirm git base-devel
+        git clone https://aur.archlinux.org/yay.git /tmp/yay
+        cd /tmp/yay
+        makepkg -si --noconfirm
+        cd -
+        rm -rf /tmp/yay
+        echo -e "${GREEN}✅ YAY installed successfully${NC}"
+    else
+        echo -e "${GREEN}✅ YAY already installed${NC}"
+    fi
+fi
+
+# ===========================
+# 2. INSTALL GAMING & DEVELOPMENT TOOLS
+# ===========================
+if feature_enabled "Install Gaming & Dev Tools (Steam, Wine, OBS, KDEnlive, etc)"; then
+    echo -e "${BLUE}🎮 Installing Gaming & Development Tools...${NC}"
+    
+    yay -S --needed --noconfirm \
+        goverlay \
+        openssh \
+        fastfetch \
+        tmux \
+        vlc \
+        kdenlive \
+        audacity \
+        obs-studio \
+        ffmpeg \
+        prismlauncher \
+        mangohud \
+        gamemode \
+        brave-bin \
+        krita \
+        libreoffice-fresh \
+        qbittorrent \
+        code \
+        lazygit \
+        kitty \
+        virt-manager \
+        steam \
+        wine-staging \
+        lib32-gamemode \
+        lib32-mangohud
+    
+    echo -e "${GREEN}✅ Gaming & Development Tools installed${NC}"
+fi
+
+# ===========================
+# 3. ENABLE BORE SCHEDULER KERNEL
+# ===========================
+if feature_enabled "Enable BORE Scheduler Kernel (linux-cachyos-bore)"; then
+    echo -e "${BLUE}🔄 Setting up linux-cachyos-bore kernel...${NC}"
+    
+    pacman -S --needed --noconfirm linux-cachyos-bore linux-cachyos-bore-headers
+    
+    echo -e "${YELLOW}⚠️  BORE Kernel installed. Please run: sudo grub-mkconfig -o /boot/grub/grub.cfg${NC}"
+    echo -e "${YELLOW}Then reboot and select the BORE kernel from the boot menu.${NC}"
+    
+    echo -e "${GREEN}✅ BORE Scheduler kernel installed${NC}"
+fi
+
+# ===========================
+# 4. INSTALL LACT (GPU Management)
+# ===========================
+if feature_enabled "Install LACT GPU Management (RX 6800 OC)"; then
+    echo -e "${BLUE}📊 Installing LACT GPU Management...${NC}"
+    
+    yay -S --needed --noconfirm lact
+    
+    # Enable LACT service
+    systemctl enable lact
+    systemctl start lact
+    
+    echo -e "${GREEN}✅ LACT installed and enabled${NC}"
+    echo -e "${YELLOW}💡 Launch LACT from applications menu for GPU overclocking settings${NC}"
+fi
+
+# ===========================
+# 5. INSTALL PROTONPLUS
+# ===========================
+if feature_enabled "Install ProtonPlus (ProtonUp-Qt replacement)"; then
+    echo -e "${BLUE}⬇️  Installing ProtonPlus...${NC}"
+    
+    yay -S --needed --noconfirm protonplus
+    
+    echo -e "${GREEN}✅ ProtonPlus installed successfully${NC}"
+fi
+
+# ===========================
+# 6. CONFIGURE LIMINE BOOTLOADER
+# ===========================
+if feature_enabled "Apply Limine Bootloader (2 sec timeout)"; then
+    echo -e "${BLUE}🚀 Configuring Limine Bootloader...${NC}"
+    
+    # Install Limine bootloader
+    yay -S --needed --noconfirm limine
+    
+    # Check if limine.conf exists and update timeout
+    if [ -f /boot/limine.conf ]; then
+        sed -i 's/^TIMEOUT=.*/TIMEOUT=2/' /boot/limine.conf
+        echo -e "${GREEN}✅ Limine bootloader configured with 2 second timeout${NC}"
+    else
+        echo -e "${YELLOW}⚠️  limine.conf not found. Manual configuration may be needed.${NC}"
+        echo -e "${YELLOW}If using Limine, ensure TIMEOUT=2 is set in /boot/limine.conf${NC}"
+    fi
+fi
+
+# ===========================
+# 7. SETUP SDDM THEMES
+# ===========================
+
+# Astronaut Theme
+if feature_enabled "Install SDDM Astronaut Theme"; then
+    echo -e "${BLUE}🌌 Installing SDDM Astronaut Theme...${NC}"
+    
+    bash -c "$(curl -fsSL https://raw.githubusercontent.com/keyitdev/sddm-astronaut-theme/master/setup.sh)" || \
+    sudo git clone -b master --depth 1 https://github.com/Keyitdev/sddm-astronaut-theme.git /usr/share/sddm/themes/sddm-astronaut-theme
+    
+    echo -e "${GREEN}✅ SDDM Astronaut Theme installed${NC}"
+fi
+
+# Pixie Theme
+if feature_enabled "Install SDDM Pixie Theme"; then
+    echo -e "${BLUE}🎨 Installing SDDM Pixie Theme...${NC}"
+    
+    if command -v yay &> /dev/null; then
+        yay -S --needed --noconfirm pixie-sddm-git
+    else
+        git clone https://github.com/xCaptaiN09/pixie-sddm.git /tmp/pixie-sddm
+        cd /tmp/pixie-sddm
+        sudo ./install.sh
+        cd -
+        rm -rf /tmp/pixie-sddm
+    fi
+    
+    echo -e "${GREEN}✅ SDDM Pixie Theme installed${NC}"
+fi
+
+# Pixel UI Theme
+if feature_enabled "Install SDDM Pixel UI Theme"; then
+    echo -e "${BLUE}💫 Installing SDDM Pixel UI Theme...${NC}"
+    
+    git clone -b pixel https://github.com/mahaveergurjar/sddm.git /tmp/sddm-pixel
+    sudo mkdir -p /usr/share/sddm/themes/
+    sudo mv /tmp/sddm-pixel/sddm /usr/share/sddm/themes/sddm-pixel
+    
+    echo -e "${GREEN}✅ SDDM Pixel UI Theme installed${NC}"
+    echo -e "${YELLOW}💡 To use this theme, edit /etc/sddm.conf and set: Current=sddm-pixel${NC}"
+fi
+
+# ===========================
+# 8. SETUP BTRFS SNAPSHOTS & cachy-update
+# ===========================
+if feature_enabled "Setup Btrfs Snapshots & cachy-update"; then
+    echo -e "${BLUE}📸 Setting up Btrfs Snapshots & cachy-update...${NC}"
+    
+    # Install Btrfs tools
+    pacman -S --needed --noconfirm btrfs-progs
+    
+    # Install cachy-update
+    yay -S --needed --noconfirm cachy-update
+    
+    echo -e "${GREEN}✅ Btrfs tools and cachy-update installed${NC}"
+    echo -e "${YELLOW}💡 Use 'cachy-update' command to manage system updates with snapshot support${NC}"
+fi
+
+# ===========================
+# 9. INSTALL OPENRGB
+# ===========================
+if feature_enabled "Install OpenRGB for RGB Control"; then
+    echo -e "${BLUE}🌈 Installing OpenRGB...${NC}"
+    
+    yay -S --needed --noconfirm openrgb
+    
+    systemctl enable openrgb
+    systemctl start openrgb
+    
+    echo -e "${GREEN}✅ OpenRGB installed and enabled${NC}"
+fi
+
+# ===========================
+# 10. GENERIC PERFORMANCE TWEAKS
+# ===========================
+echo -e "${BLUE}⚙️  Applying Performance Tweaks...${NC}"
+
+# CPU Governor to Performance
+echo "performance" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor > /dev/null
+
+# Create tmpfiles.d entry for persistence
+mkdir -p /etc/tmpfiles.d
+cat > /etc/tmpfiles.d/cpu-governor.conf << 'EOF'
+w /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor - - - - performance
+EOF
+
+# ZRAM Configuration
+pacman -S --needed --noconfirm systemd-zram-generator
+
+cat > /etc/systemd/zram-generator.conf << 'EOF'
+[zram0]
+zram-size = ram / 2
+compression-algorithm = zstd
+EOF
+
+# Sysctl Performance Tweaks
+cat >> /etc/sysctl.d/99-performance-tweaks.conf << 'EOF'
+vm.swappiness=10
+vm.vfs_cache_pressure=50
+vm.max_map_count=2147483642
+EOF
+
+sysctl -p > /dev/null 2>&1
+
+# Enable MangoHud and GameMode by default
+if ! grep -q "MANGOHUD=1" /etc/environment; then
+    echo "MANGOHUD=1" >> /etc/environment
+fi
+
+if ! grep -q "GAMEMODERUNEXEC=1" /etc/environment; then
+    echo "GAMEMODERUNEXEC=1" >> /etc/environment
+fi
+
+# KDE Gaming Layout Optimizations
+if feature_enabled "Install KDE Gaming Layout (Latte Dock)"; then
+    yay -S --needed --noconfirm latte-dock
+    plasma-apply-lookandfeel org.kde.breezedark.desktop
+fi
+
+echo -e "${GREEN}✅ Performance tweaks applied${NC}"
+
+# ===========================
+# 11. DISPLAY VULKAN INFO
+# ===========================
+echo -e "${BLUE}🎨 Setting up Vulkan support...${NC}"
+
+pacman -S --needed --noconfirm \
+    vulkan-radeon \
+    opencl-mesa \
+    lib32-vulkan-radeon \
+    lib32-opencl-mesa \
+    lib32-gamemode
+
+echo -e "${GREEN}✅ Vulkan and OpenCL support installed${NC}"
+
+# ===========================
+# 12. OBS STUDIO PROFILE
+# ===========================
+echo -e "${BLUE}📹 Configuring OBS Studio...${NC}"
+
+mkdir -p ~/.config/obs-studio/basic/profiles/YouTube720p
+
+cat > ~/.config/obs-studio/basic/profiles/YouTube720p/basic.ini << 'EOF'
+[General]
+Name=YouTube720p
+
+[Video]
+BaseCX=1280
+BaseCY=720
+OutputCX=1280
+OutputCY=720
+
+[Output]
+Mode=Advanced
+Bitrate=4500
+Encoder=x264
+EOF
+
+echo -e "${GREEN}✅ OBS Studio profile created${NC}"
+
+# ===========================
+# 13. STEAM OPTIMIZATION
+# ===========================
+echo -e "${BLUE}🎮 Optimizing Steam for 1366x768 resolution...${NC}"
+
+mkdir -p ~/.steam/steam
+if ! grep -q "STEAM_FORCE_DESKTOPUI_SCALE" ~/.steam/steam/env; then
+    echo "STEAM_FORCE_DESKTOPUI_SCALE=0.75" >> ~/.steam/steam/env
+fi
+
+echo -e "${GREEN}✅ Steam configured${NC}"
+
+# ===========================
+# 14. KDE SCALE FACTOR
+# ===========================
+echo -e "${BLUE}🖥️  Adjusting KDE scale factor...${NC}"
+
+kwriteconfig5 --file kdeglobals --group KScreen --key ScaleFactor "0.9"
+
+echo -e "${GREEN}✅ KDE scale factor adjusted${NC}"
+
+# ===========================
+# FINAL MESSAGES
+# ===========================
+echo ""
+echo -e "${GREEN}╔════════════════════════════════════════════════════════════════╗${NC}"
+echo -e "${GREEN}║          ✅ CachyOS Ultimate Tune v2.0 Complete!             ║${NC}"
+echo -e "${GREEN}╚════════════════════════════════════════════════════════════════╝${NC}"
+echo ""
+echo -e "${YELLOW}📋 NEXT STEPS:${NC}"
+echo ""
+echo -e "${BLUE}1. REBOOT YOUR SYSTEM${NC}"
+echo "   Run: ${GREEN}reboot${NC}"
+echo ""
+echo -e "${BLUE}2. AFTER REBOOT, VERIFY YOUR SETUP:${NC}"
+echo "   - GPU: Run ${GREEN}lact${NC} to manage GPU settings"
+echo "   - ProtonPlus: Available in applications menu"
+echo "   - Updates: Run ${GREEN}cachy-update${NC} for system updates"
+echo "   - System Info: Run ${GREEN}fastfetch${NC}"
+echo ""
+echo -e "${BLUE}3. OPTIONAL SDDM THEME SELECTION:${NC}"
+if feature_enabled "Install SDDM Astronaut Theme"; then
+    echo "   - Edit: sudo nano /etc/sddm.conf"
+    echo "   - Set: Current=sddm-astronaut-theme"
+fi
+if feature_enabled "Install SDDM Pixie Theme"; then
+    echo "   - Edit: sudo nano /etc/sddm.conf"
+    echo "   - Set: Current=pixie-sddm"
+fi
+if feature_enabled "Install SDDM Pixel UI Theme"; then
+    echo "   - Edit: sudo nano /etc/sddm.conf"
+    echo "   - Set: Current=sddm-pixel"
+fi
+echo ""
+echo -e "${BLUE}4. KERNEL SELECTION (if BORE installed):${NC}"
+echo "   - At boot, select 'linux-cachyos-bore' from the bootloader menu"
+echo "   - Then update GRUB: ${GREEN}sudo grub-mkconfig -o /boot/grub/grub.cfg${NC}"
+echo ""
+echo -e "${YELLOW}💡 TIPS:${NC}"
+echo "   - MangoHud enabled by default (toggle with Shift+F12 in games)"
+echo "   - GameMode active for all games"
+echo "   - Vulkan acceleration ready for gaming"
+echo "   - Use ProtonPlus to manage Proton versions"
+echo ""
+echo -e "${GREEN}🎮 Happy Gaming!${NC}"
+echo ""
+
+# ===========================
+# FINAL REBOOT PROMPT
+# ===========================
+zenity --question \
+    --title="CachyOS Gaming Tuner" \
+    --width=400 \
+    --text="Installation complete! Would you like to reboot now to apply all changes?" \
+    --ok-label="Reboot Now" \
+    --cancel-label="Reboot Later"
+
+if [ $? -eq 0 ]; then
+    echo -e "${YELLOW}Rebooting in 10 seconds...${NC}"
+    sleep 10
+    reboot
+else
+    echo -e "${YELLOW}Please reboot manually when ready: reboot${NC}"
+fi
+
+################################################################################
+# END OF SCRIPT
+################################################################################
