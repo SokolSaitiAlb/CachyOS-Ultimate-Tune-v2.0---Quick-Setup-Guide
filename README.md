@@ -2,6 +2,8 @@
 
 **A comprehensive system optimization script for CachyOS with RX 6800 + KDE Gaming Setup**
 
+**📍 Repository:** https://github.com/SokolSaitiAlb/CachyOS-Ultimate-Tune-v2.0---Quick-Setup-Guide
+
 ---
 
 ## 🎯 What's New in v2.0
@@ -127,26 +129,40 @@ When you select "Install Gaming & Dev Tools", you get:
 - Internet connection
 - ~5GB free disk space (for all tools)
 
-### Step 1: Download the Script
+---
+
+## 📥 Installation Steps
+
+### **Step 1: Download the Script**
+
+**Option A - Download with wget:**
 ```bash
-wget https://github.com/SokolSaitiAlb/cachyos-ultimate-tune.sh/raw/main/cachyos-ultimate-tune-improved.sh
+wget https://github.com/SokolSaitiAlb/CachyOS-Ultimate-Tune-v2.0---Quick-Setup-Guide/raw/main/cachyos-ultimate-tune-improved.sh
 ```
 
-Or clone the repository:
+**Option B - Clone the repository:**
 ```bash
-git clone https://github.com/yourusername/cachyos-ultimate-tune.sh
-cd cachyos-ultimate-tune.sh
+git clone https://github.com/SokolSaitiAlb/CachyOS-Ultimate-Tune-v2.0---Quick-Setup-Guide.git
+cd CachyOS-Ultimate-Tune-v2.0---Quick-Setup-Guide
 ```
 
-### Step 2: Make Executable
+---
+
+### **Step 2: Make Executable**
+
 ```bash
 chmod +x cachyos-ultimate-tune-improved.sh
 ```
 
-### Step 3: Run with Root
+---
+
+### **Step 3: Run with Root**
+
 ```bash
 sudo ./cachyos-ultimate-tune-improved.sh
 ```
+
+---
 
 ### Step 4: Select Features
 A GUI window will appear showing all available features. Check the boxes for what you want:
@@ -395,15 +411,28 @@ sudo grub-mkconfig -o /boot/grub/grub.cfg
 
 ## 📚 Resources
 
+**Main Repository:**
+- **CachyOS Ultimate Tune v2.0**: https://github.com/SokolSaitiAlb/CachyOS-Ultimate-Tune-v2.0---Quick-Setup-Guide
+  - Script: `cachyos-ultimate-tune-improved.sh`
+  - Documentation: `CACHYOS_TUNE_README.md`
+  - Quick Guide: `QUICK_START_GUIDE.md`
+
+**Tool Repositories:**
 - **LACT GPU Manager**: https://github.com/ilya-zlobintsev/LACT
 - **BORE Scheduler**: https://github.com/firelzrd/bore-scheduler
 - **ProtonPlus**: https://github.com/Vysp3r/ProtonPlus
+- **ProtonPlus AUR**: https://aur.archlinux.org/packages/protonplus
 - **cachy-update**: https://github.com/CachyOS/cachy-update
 - **Limine Bootloader**: https://github.com/Limine-Bootloader/Limine
-- **SDDM Themes**:
-  - Astronaut: https://github.com/Keyitdev/sddm-astronaut-theme
-  - Pixie: https://github.com/xCaptaiN09/pixie-sddm
-  - Pixel: https://github.com/mahaveergurjar/sddm
+
+**SDDM Themes:**
+- **Astronaut**: https://github.com/Keyitdev/sddm-astronaut-theme
+- **Pixie**: https://github.com/xCaptaiN09/pixie-sddm
+- **Pixel UI**: https://github.com/mahaveergurjar/sddm
+
+**Official CachyOS:**
+- **CachyOS Website**: https://cachyos.org
+- **CachyOS GitHub**: https://github.com/CachyOS
 
 ---
 
@@ -436,5 +465,5 @@ Use at your own risk. Always backup your system before major changes.
 
 ---
 
-*Last updated: 2025*  
+*Last updated: 01.04.2026  
 *By: Alb Kestrel (Improved v2.0)*
