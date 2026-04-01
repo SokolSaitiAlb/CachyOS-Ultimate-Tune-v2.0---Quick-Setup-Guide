@@ -275,7 +275,7 @@ sysbench cpu --cpu-max-prime=20000 run
 
 ### v1.0 (Legacy)
 - Original CachyOS gaming setup
-
+https://github.com/SokolSaitiAlb/cachyos-ultimate-tune.sh
 ---
 
 ## 🤝 Contributing
