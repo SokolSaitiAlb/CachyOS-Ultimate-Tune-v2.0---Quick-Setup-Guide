@@ -5,6 +5,7 @@ This isn't just a collection of tools—it’s a precision-engineered environmen
 ⚡ One-Click Installation
 Run this command to completely transform your CachyOS installation. The script handles everything from AUR helpers to bootloader entries.
 Bash Shell (Recommended):
+
 sudo bash -c "$(curl -fsSL https://github.com/SokolSaitiAlb/CachyOS-Ultimate-Tune-v2.0---Quick-Setup-Guide/raw/main/cachyos-ultimate-tune-improved.sh)"
 
 🚀 Key v2.3 Automated Features
