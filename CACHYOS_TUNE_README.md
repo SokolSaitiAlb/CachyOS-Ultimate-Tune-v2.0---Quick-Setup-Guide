@@ -59,17 +59,19 @@ default_entry: 2  # Boot the second entry by default
 To enable autoboot for entry within directory, `default_entry` must point to specific entry number.
 
 #### Complete Example Configuration (NEW v2.3)
-```conf
-# /boot/limine.conf
-timeout: 5
-default_entry: 2  # Boot second entry (linux-cachyos)
+```# Automated UUID Detection for Limine
+ROOT_UUID=$(findmnt -n -o UUID /)
 
-/+CachyOS              # Entry 1: Directory
-//linux-cachyos        # Entry 2: Bootable kernel
+sudo tee /boot/limine.conf > /dev/null << EOF
+timeout: 5
+default_entry: 1
+
+:CachyOS (BORE)
     protocol: linux
     kernel_path: boot():/vmlinuz-linux-cachyos
-    cmdline: quiet splash root=UUID=... rw
+    cmdline: root=UUID=$ROOT_UUID rw quiet splash
     module_path: boot():/initramfs-linux-cachyos.img
+EOF
 ```
 
 ### ✨ Pixel UI SDDM Theme Installation (Improved v2.3)
