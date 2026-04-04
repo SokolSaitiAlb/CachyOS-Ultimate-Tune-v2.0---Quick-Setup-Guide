@@ -309,5 +309,5 @@ This project is provided as-is for CachyOS optimization purposes.
 
 **Made with ❤️ for CachyOS gaming enthusiasts**
 
-*Last updated: 2025*  
+*Last updated:04.04 2026*  
 By: Alb Kestrel
