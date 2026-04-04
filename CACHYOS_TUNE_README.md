@@ -23,8 +23,20 @@ python3 -c "import subprocess; subprocess.run(['bash', '-c', 'sudo $(curl -fsSL 
 
 #### Timeout Setting (NEW v2.3)
 ```bash
-# /boot/limine.conf
-timeout: 5  # Seconds before automatic boot
+# Automated UUID Detection for Limine
+ROOT_UUID=$(findmnt -n -o UUID /)
+
+sudo tee /boot/limine.conf > /dev/null << EOF
+timeout: 5
+default_entry: 1
+
+:CachyOS (BORE)
+    protocol: linux
+    kernel_path: boot():/vmlinuz-linux-cachyos
+    cmdline: root=UUID=$ROOT_UUID rw quiet splash
+    module_path: boot():/initramfs-linux-cachyos.img
+EOF
+
 ```
 
 - Sets how many seconds Limine waits before booting
