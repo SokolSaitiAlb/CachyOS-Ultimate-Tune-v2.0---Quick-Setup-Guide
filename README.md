@@ -206,5 +206,5 @@ MIT License - Use at your own risk. Always backup before major changes.
 ---
 
 *By: Alb Kestrel (Sokol Saiti)*  
-*Last updated: 2025 - v2.3*  
+*Last updated:04.04.2026 - v2.3*  
 *YouTube: [@ALBKESTRELYTofficial](https://youtube.com/@albkestrelytofficial)*
