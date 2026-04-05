@@ -1,9 +1,16 @@
+---
+
+### 📜 Finalized cachyos-ultimate-tune-improved.sh
+**Action:** Replace the entire content of your `.sh` file with this code.
+
+```bash
 #!/bin/bash
 
 ################################################################################
 # CachyOS ULTIMATE GAMING TUNER v2.6 (Performance Focus)
-# Optimized for: AMD RX 6800 + 1440p High-Refresh
+# Optimized for: AMD RX 6800 + i5-12400F
 # Changes: Fixed RADV conflict, removed forced scaling, removed redundant yay build
+# Repo: https://github.com/SokolSaitiAlb/CachyOS-Ultimate-Tune-v2.0---Quick-Setup-Guide
 ################################################################################
 
 set -e
@@ -20,12 +27,11 @@ echo -e "${BLUE}🔧 Starting CachyOS Ultimate Tune v2.6...${NC}"
 # 1. REVERSE VALIDATION: Block Root Execution
 if [ "$EUID" -eq 0 ]; then
     echo -e "${RED}🚫 ERROR: Do NOT run this script with sudo directly.${NC}"
-    echo -e "${YELLOW}Run it as: ./tuner.sh${NC}"
+    echo -e "${YELLOW}Run it as a normal user: ./cachyos-ultimate-tune-improved.sh${NC}"
     exit 1
 fi
 
 # 2. DEPENDENCY CHECK (Zenity & YAY)
-# CachyOS includes yay by default; we only install Zenity if missing
 if ! command -v zenity > /dev/null; then
     echo -e "${YELLOW}Installing Zenity for GUI support...${NC}"
     sudo pacman -S --noconfirm zenity
@@ -63,8 +69,7 @@ echo -e "${BLUE}🖥️  Applying AMD Performance Variables...${NC}"
 mkdir -p "$HOME/.config/environment.d"
 {
     echo "MESA_SHADER_CACHE_MAX_SIZE=12G"
-    # NGGC is Next-Gen Geometry. Huge for the RX 6800.
-    # Removed nonggc conflict to prioritize raw speed.
+    # NGGC is Next-Gen Geometry. Essential for RX 6800 performance.
     echo "RADV_PERFTEST=nggc" 
 } > "$HOME/.config/environment.d/gaming.conf"
 
@@ -73,11 +78,11 @@ echo -e "${BLUE}⚡ Applying Sysctl Tweaks...${NC}"
 sudo tee /etc/sysctl.d/99-performance.conf > /dev/null << EOF
 # Lower swappiness for NVMe/16GB RAM setups
 vm.swappiness=10
-# Essential for heavy games like Star Citizen or modded Minecraft
+# Essential for heavy games (Star Citizen, modded Minecraft, etc.)
 vm.max_map_count=2147483642
 EOF
 sudo sysctl -p /etc/sysctl.d/99-performance.conf
 
 echo -e "---"
 echo -e "${GREEN}⭐ PERFORMANCE TUNE COMPLETE! ⭐${NC}"
-echo -e "${YELLOW}KDE Scaling was left to default to protect your future 1440p display.${NC}"
+echo -e "${YELLOW}Reboot your system to apply the new graphics and kernel parameters.${NC}"
