@@ -30,6 +30,7 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/SokolSaitiAlb/[YOUR_REPO
 | Security | PoLP Compliant (Non-root execution) |
 📹 Community & Support
  * YouTube: @ALBKESTRELYTofficial
+https://m.youtube.com/AlbKestrel1
  * GitHub: SokolSaitiAlb
 > [!IMPORTANT]
 > Post-Install: Reboot immediately to apply the MESA environment variables and sysctl performance parameters.
