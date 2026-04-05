@@ -1,39 +1,36 @@
-🔧 CachyOS ULTIMATE GAMING TUNER v2.4
-Precision-Engineered for RX 6800 + i5-12400F | Optimized for 768p High-Performance Gaming
-v2.4 "PoLP" Edition: Fully refactored for security. This script now follows the Principle of Least Privilege, running in user-space and only invoking sudo for critical system changes. No more makepkg errors or permission conflicts.
+🚀 CachyOS ULTIMATE GAMING TUNER v2.6
+The "RDNA 2 Performance" Edition
+Precision-Engineered for AMD RX 6800 + i5-12400F
+This script is a fully refactored, high-performance deployment tool for CachyOS. It follows the Principle of Least Privilege (PoLP)—running in user-space and only invoking sudo for critical system changes. No more makepkg errors or permission conflicts.
 ⚡ One-Click Secure Installation
-Run the command below as a regular user. The script will securely prompt for your password only when necessary (e.g., installing packages or updating bootloaders).
+Run the command below as a regular user. The script will securely prompt for your password only when necessary.
 DO NOT run this with sudo.
-bash -c "$(curl -fsSL https://github.com/SokolSaitiAlb/CachyOS-Ultimate-Tune-v2.0---Quick-Setup-Guide/raw/main/cachyos-ultimate-tune-improved.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/SokolSaitiAlb/[YOUR_REPO_NAME]/main/tuner.sh)"
 
-🚀 Key v2.4 Engineered Features
+🚀 Key v2.6 Engineered Features
 🛠️ Infrastructure as Code (IaC) Approach
- * Automated Limine Config: Detects your Root UUID and generates a bootable limine.conf automatically. No manual editing required.
- * SDDM Pixel UI: Installs and activates the minimalist theme via drop-in /etc/sddm.conf.d/ overrides.
- * User-Centric Scaling: Applies KDE and Steam scaling directly to your user profile without touching root’s environment.
+ * Zero-Touch Dependency Management: Leverages the native CachyOS yay and pacman repositories for maximum stability.
+ * SDDM Pixel UI: Installs and activates the minimalist theme via modern /etc/sddm.conf.d/ overrides.
+ * Clean Environment: Writes variables to ~/.config/environment.d/ for a standardized, modular configuration.
 🎮 High-Performance Gaming Pipeline
- * 12GB Shader Cache: Pre-configured MESA_SHADER_CACHE to eliminate stuttering on the RX 6800.
- * The "Pro" Stack: Installs Steam, Wine-Staging, Mangohud, Gamemode, and proton-ge-custom-bin via a secured yay build process.
- * GPU Management: Full LACT integration for AMD power profile management.
-🖥️ 1366x768 "High-Res" Simulation
- * KDE Global Scale (0.9x): Recovers critical screen real estate on 768p displays. Optimized for Plasma 5 & 6.
- * Steam UI Force (0.75x): Fixes the "New Big Picture" overflow issues common on lower resolutions.
+ * Next-Gen Geometry (NGGC): Explicitly enables RADV_PERFTEST=nggc to unlock hardware-level primitive shaders on the RX 6800.
+ * 12GB Shader Cache: Massive MESA_SHADER_CACHE to eliminate stuttering in AAA titles.
+ * The "Pro" Stack: Installs Steam, Wine-Staging, MangoHud, Gamemode, and GE-Proton for ultimate compatibility.
+ * GPU Management: Full LACT integration for RDNA 2 power profile and fan curve management.
+⚡ System Kernel & Memory Tweaks
+ * 16GB RAM Optimization: Set vm.swappiness=10 to prioritize physical memory over disk swap.
+ * Memory Map Expansion: Set vm.max_map_count to 2147483642 for heavy titles like Star Citizen and modded Minecraft.
 📋 System Target Specifications
 | Component | Optimization Strategy |
 |---|---|
 | CPU | Intel i5-12400F (Performance Governor + Sysctl Tweaks) |
-| GPU | AMD RX 6800 16GB (Max Shader Cache + BORE Scheduler) |
-| Monitor | 1366x768 @ 60Hz (Custom 0.9x UI Scaling) |
-| Bootloader | Limine (Fully Automated UUID Injection) |
+| GPU | AMD RX 6800 16GB (NGGC Enabled + 12GB Cache) |
+| Monitor | 1440p Ready (Native Scaling preserved for high-DPI clarity) |
+| Kernel | CachyOS Bore / LTO Optimized |
 | Security | PoLP Compliant (Non-root execution) |
 📹 Community & Support
-See the benchmarks and setup guides in action:
  * YouTube: @ALBKESTRELYTofficial
-https://youtube.com/@albkestrelytofficial
-
  * GitHub: SokolSaitiAlb
-
 > [!IMPORTANT]
-> Post-Install: Reboot immediately to apply the new Limine bootloader configuration and kernel performance parameters.
+> Post-Install: Reboot immediately to apply the MESA environment variables and sysctl performance parameters.
 > 
-Last updated: 05.04.2026 — v2.4 (Security & Permission Refactor)
