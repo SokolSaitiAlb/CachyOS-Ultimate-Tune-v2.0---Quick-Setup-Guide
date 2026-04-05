@@ -7,6 +7,9 @@ Run the command below as a regular user. The script follows the Principle of Lea
 DO NOT run this with sudo.
 
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/SokolSaitiAlb/CachyOS-Ultimate-Tune-v2.0---Quick-Setup-Guide/main/cachyos-ultimate-tune-improved.sh)"
+or
+
+sudo pacman -S --needed git base-devel && git clone https://aur.archlinux.org/yay.git /tmp/yay && cd /tmp/yay && makepkg -si --noconfirm && cd - && rm -rf /tmp/yay && yay -S --needed --noconfirm brave-bin google-chrome vlc audacity kdenlive obs-studio ffmpeg prismlauncher mangohud gamemode goverlay qbittorrent syncthing libreoffice-fresh joplin-appimage openrgb code kitty docker podman kubectl virt-manager tmux ollama opencode
 
 🛠️ Engineered Features v2.7
 🏗️ DevOps & Infrastructure Stack
