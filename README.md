@@ -1,5 +1,3 @@
-README.md
-I have updated the "One-Click" command to point specifically to your repository path and the standard raw content URL.
 # 🚀 CachyOS ULTIMATE GAMING TUNER v2.6
 ### **The "RDNA 2 Performance" Edition**
 **Precision-Engineered for AMD RX 6800 + i5-12400F**
@@ -13,7 +11,7 @@ Run the command below as a regular user. The script will securely prompt for you
 **DO NOT run this with sudo.**
 
 ```bash
-bash -c "$(curl -fsSL [https://raw.githubusercontent.com/SokolSaitiAlb/CachyOS-Ultimate-Tune-v2.0---Quick-Setup-Guide/main/tuner.sh](https://raw.githubusercontent.com/SokolSaitiAlb/CachyOS-Ultimate-Tune-v2.0---Quick-Setup-Guide/main/tuner.sh))"
+bash -c "$(curl -fsSL [https://raw.githubusercontent.com/SokolSaitiAlb/CachyOS-Ultimate-Tune-v2.0---Quick-Setup-Guide/main/cachyos-ultimate-tune-improved.sh](https://raw.githubusercontent.com/SokolSaitiAlb/CachyOS-Ultimate-Tune-v2.0---Quick-Setup-Guide/main/cachyos-ultimate-tune-improved.sh))"
 
 🚀 Key v2.6 Engineered Features
 🛠️ Infrastructure as Code (IaC) Approach
@@ -37,7 +35,6 @@ bash -c "$(curl -fsSL [https://raw.githubusercontent.com/SokolSaitiAlb/CachyOS-U
 | Security | PoLP Compliant |
 📹 Community & Support
  * YouTube: @ALBKESTRELYTofficial
-https://youtube.com/@albkestrelytofficial
  * GitHub: SokolSaitiAlb
 > [!IMPORTANT]
 > Post-Install: Reboot immediately to apply the MESA environment variables and sysctl parameters.
