@@ -35,6 +35,8 @@ bash -c "$(curl -fsSL [https://raw.githubusercontent.com/SokolSaitiAlb/CachyOS-U
 | Security | PoLP Compliant |
 📹 Community & Support
  * YouTube: @ALBKESTRELYTofficial
+https://youtube.com/@albkestrelytofficial
+
  * GitHub: SokolSaitiAlb
 > [!IMPORTANT]
 > Post-Install: Reboot immediately to apply the MESA environment variables and sysctl parameters.
