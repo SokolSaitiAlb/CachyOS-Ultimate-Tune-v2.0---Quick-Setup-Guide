@@ -10,8 +10,8 @@ An all-in-one automation script for CachyOS users, optimized for AMD performance
 ## 🚀 Quick Start
 Run the following command in your terminal:
 
-```bash
-curl -fsSL [https://raw.githubusercontent.com/SokolSaitiAlb/CachyOS-Ultimate-Tune-v2.0---Quick-Setup-Guide/main/cachyos-ultimate-tune-improved.sh](https://raw.githubusercontent.com/SokolSaitiAlb/CachyOS-Ultimate-Tune-v2.0---Quick-Setup-Guide/main/cachyos-ultimate-tune-improved.sh) | bash
+curl -fsSL https://raw.githubusercontent.com/SokolSaitiAlb/CachyOS-Ultimate-Tune-v2.0---Quick-Setup-Guide/main/cachyos-ultimate-tune-improved.sh | bash
+
 
 
 ```
