@@ -76,6 +76,11 @@ fi
 #  4. Packages
 # ---------------------------------------------------------------------------
 info "Step 4: Instalimi i Paketave..."
+
+# Rifreskimi i databazës për të parandaluar gabimet 404
+info "Duke rifreskuar databazën e paketave për të shmangur 404..."
+sudo pacman -Syy --noconfirm
+
 PKGS=(
     chromium brave-bin vlc audacity kdenlive obs-studio ffmpeg
     lutris heroic-games-launcher-bin prismlauncher mangohud gamemode goverlay
