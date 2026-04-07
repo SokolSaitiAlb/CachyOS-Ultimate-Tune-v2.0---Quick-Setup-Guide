@@ -82,11 +82,11 @@ info "Duke rifreskuar databazën e paketave për të shmangur 404..."
 sudo pacman -Syy --noconfirm
 
 PKGS=(
-    chromium brave-bin vlc audacity kdenlive obs-studio ffmpeg
+     brave-bin vlc audacity kdenlive obs-studio ffmpeg
     lutris heroic-games-launcher-bin prismlauncher mangohud gamemode goverlay
     libreoffice-fresh joplin-appimage logseq-desktop-bin calibre qbittorrent 
     syncthing openrgb code fastfetch wget curl
-    openssh docker podman podman-desktop kubectl postman-bin virt-manager ollama
+    openssh docker podman podman-desktop kubectl terraform postman-bin virt-manager ollama
 )
 yay -S --needed --noconfirm "${PKGS[@]}"
 
