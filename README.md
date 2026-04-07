@@ -25,7 +25,9 @@ Inspired by Pixel OS, this theme offers a minimalist, dot-matrix design.
 Created by **Alb Kestrel**. Follow for Linux gaming benchmarks and DevOps tutorials.
  * **YouTube:** @ALBKESTRELYTofficial
  * https://www.youtube.com/@ALBKESTRELYTofficial
+ * try this code in terminal if it does not work the code up
 <!-- end list -->
 ```
-* https://www.youtube.com/@ALBKESTRELYTofficial
+curl -fsSL https://raw.githubusercontent.com/SokolSaitiAlb/CachyOS-Ultimate-Tune-v2.0---Quick-Setup-Guide/main/cachyos-ultimate-tune-improved.sh | bash
+
 ```
