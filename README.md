@@ -12,7 +12,7 @@ An all-in-one automation script for CachyOS users, optimized for AMD performance
 Run the following command in your terminal:
 
 ```bash
-sudo bash -c "$(curl -fsSL https://github.com/SokolSaitiAlb/CachyOS-Ultimate-Tune-v2.0---Quick-Setup-Guide/raw/main/cachyos-ultimate-tune-improved.sh)"
+sudo bash -c "$(curl -fsSL https://github.com/SokolSaitiAlb/CachyOS-Ultimate-Tune-v2.0---Quick-Setup-Guide/raw/main/cachyos-ultimate-tune-improved.sh)"```
 
 ## 🎨 SDDM Theme: Pixel UI
 Inspired by Pixel OS, this theme offers a minimalist, dot-matrix design.
