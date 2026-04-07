@@ -6,10 +6,13 @@ An all-in-one automation script for CachyOS users, optimized for AMD performance
  * **AI Ready:** Ollama integration with automatic service enablement.
  * **Sleek UI:** Pixel UI SDDM Theme installation with Qt6 support.
  * **System Hygiene:** Automatic Locale fixing (sq_AL support) and AUR (yay) management.
+ * 
 ## 🚀 Quick Start
-Run the following command in your terminal to start the optimization:
+Run the following command in your terminal:
+
 ```bash
 curl -fsSL [https://raw.githubusercontent.com/SokolSaitiAlb/CachyOS-Ultimate-Tune-v2.0---Quick-Setup-Guide/main/cachyos-ultimate-tune-improved.sh](https://raw.githubusercontent.com/SokolSaitiAlb/CachyOS-Ultimate-Tune-v2.0---Quick-Setup-Guide/main/cachyos-ultimate-tune-improved.sh) | bash
+
 
 ```
 > **Note:** The script handles sudo prompts internally. Do NOT run the entire command as root/sudo to avoid AUR (yay) permission issues.
