@@ -1,4 +1,4 @@
-# CachyOS Ultimate Gaming Tune v2.3 🚀
+# CachyOS Ultimate Gaming Tune v10.0 🚀
 An all-in-one automation script for CachyOS users, optimized for AMD performance (RX 6800) and a full DevOps engineering stack.
 ## ✨ Key Features
  * **AMD Optimization:** NGGC enabled & 12GB Shader Cache configuration.
