@@ -11,7 +11,6 @@ An all-in-one automation script for CachyOS users, optimized for AMD performance
 Run the following command in your terminal:
 ```
 curl -fsSL https://raw.githubusercontent.com/SokolSaitiAlb/CachyOS-Ultimate-Tune-v2.0---Quick-Setup-Guide/main/cachyos-ultimate-tune-improved.sh | bash
-
 ```
 > **Note:** The script handles sudo prompts internally. Do NOT run the entire command as root/sudo to avoid AUR (yay) permission issues.
 > 
