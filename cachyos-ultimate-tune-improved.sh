@@ -29,22 +29,26 @@ error()   { echo -e "${RED}[x]${NC} $1" >&3; }
 # ---------------------------------------------------------------------------
 #  1. Pre-Flight Checks (Locale & Permissions)
 # ---------------------------------------------------------------------------
-[ "$EUID" -eq 0 ] && { error "Do not run as root."; exit 1; }
+if [ "$EUID" -eq 0 ]; then
+    error "MOS E EKZEKUTO SI ROOT. Përdor përdoruesin tënd normal (yay kërkon këtë)."
+    exit 1
+fi
+
 sudo -v || exit 1
 
-info "Step 1: Checking System Hygiene (Locales)..."
+info "Step 1: Kontrolli i Higjienës (Locales)..."
 if ! locale -a | grep -q "sq_AL.utf8"; then
-    warn "sq_AL locale missing. Fixing..."
+    warn "sq_AL mungon. Duke e rregulluar..."
     echo "sq_AL.UTF-8 UTF-8" | sudo tee -a /etc/locale.gen > /dev/null
     sudo locale-gen > /dev/null
-    success "Locales fixed."
+    success "Locales u rregulluan."
 fi
 
 # ---------------------------------------------------------------------------
 #  2. AUR Helper (yay) Installation
 # ---------------------------------------------------------------------------
 if ! command -v yay &> /dev/null; then
-    info "Installing yay (AUR Helper)..."
+    info "Duke instaluar yay (AUR Helper)..."
     sudo pacman -S --needed --noconfirm git base-devel
     git clone https://aur.archlinux.org/yay.git /tmp/yay
     cd /tmp/yay && makepkg -si --noconfirm && cd -
@@ -54,8 +58,7 @@ fi
 # ---------------------------------------------------------------------------
 #  3. SDDM Pixel UI Theme Installation
 # ---------------------------------------------------------------------------
-info "Step 3: Installing Pixel UI SDDM Theme..."
-# Install dependencies for Qt6 themes
+info "Step 3: Duke instaluar Pixel UI SDDM Theme..."
 sudo pacman -S --needed --noconfirm qt6-5compat qt6-declarative
 
 PIXEL_DIR="/usr/share/sddm/themes/sddm-pixel"
@@ -65,42 +68,42 @@ if [ ! -d "$PIXEL_DIR" ]; then
     sudo mkdir -p "$PIXEL_DIR"
     sudo cp -r "$tmp/"* "$PIXEL_DIR/"
     
-    # Configure SDDM
     sudo mkdir -p /etc/sddm.conf.d
     echo -e "[Theme]\nCurrent=sddm-pixel" | sudo tee /etc/sddm.conf.d/theme.conf > /dev/null
-    success "SDDM Theme installed."
+    success "Tema SDDM u instalua."
     rm -rf "$tmp"
 fi
 
 # ---------------------------------------------------------------------------
 #  4. Package Deployment (The Massive Stack)
 # ---------------------------------------------------------------------------
-info "Step 4: Deploying Software Stack..."
+info "Step 4: Duke instaluar aplikacionet dhe veglat DevOps..."
 
 PKGS=(
-    # Browsers & Media
     chromium brave-bin vlc audacity kdenlive obs-studio ffmpeg
-    # Gaming
     lutris heroic-games-launcher-bin prismlauncher mangohud gamemode goverlay
-    # Productivity & Tools
     libreoffice-fresh joplin-appimage logseq-desktop-bin calibre qbittorrent 
     syncthing openrgb code fastfetch wget curl
-    # DevOps & Virtualization
     openssh docker podman podman-desktop kubectl postman-bin virt-manager ollama
 )
 
 yay -S --needed --noconfirm "${PKGS[@]}"
 
+# --- DevOps Post-Install ---
+info "Duke konfiguruar Docker & Ollama..."
+sudo usermod -aG docker "$USER"
+sudo systemctl enable --now ollama
+
 # ---------------------------------------------------------------------------
 #  5. System Performance Tweaks
 # ---------------------------------------------------------------------------
-info "Step 5: Applying Performance Tweaks (AMD + Sysctl)..."
-# AMD Shader Cache
+info "Step 5: Optimizimi i AMD dhe Sistemrit..."
 mkdir -p "$HOME/.config/environment.d"
-echo "MESA_SHADER_CACHE_MAX_SIZE=12G" > "$HOME/.config/environment.d/gaming.conf"
-echo "RADV_PERFTEST=nggc" >> "$HOME/.config/environment.d/gaming.conf"
+{
+    echo "MESA_SHADER_CACHE_MAX_SIZE=12G"
+    echo "RADV_PERFTEST=nggc"
+} > "$HOME/.config/environment.d/gaming.conf"
 
-# Virtual Memory
 sudo tee /etc/sysctl.d/99-performance.conf > /dev/null << EOF
 vm.swappiness=10
 vm.max_map_count=2147483642
@@ -108,6 +111,6 @@ EOF
 sudo sysctl -p /etc/sysctl.d/99-performance.conf
 
 # ---------------------------------------------------------------------------
-success "V2.3 INSTALLATION COMPLETE."
-warn "Please reboot to apply SDDM changes and Performance Tweaks."
+success "V2.3 U INSTALUA ME SUKSES."
+warn "Rinisni (Reboot) sistemin për të aplikuar temën SDDM dhe grupin Docker."
 info "YouTube: Alb Kestrel (@ALBKESTRELYTofficial)"
