@@ -24,7 +24,6 @@ Inspired by Pixel OS, this theme offers a minimalist, dot-matrix design.
 ## 📺 About the Author
 Created by **Alb Kestrel**. Follow for Linux gaming benchmarks and DevOps tutorials.
  * **YouTube:** @ALBKESTRELYTofficial
+ * https://www.youtube.com/@ALBKESTRELYTofficial
 <!-- end list -->
 ```
-
----
