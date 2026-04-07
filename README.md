@@ -24,3 +24,4 @@ Inspired by Pixel OS, this theme offers a minimalist design.
 ## 📺 About the Author
 Created by **Alb Kestrel**. Follow for Linux gaming benchmarks and DevOps tutorials.
  * **YouTube:** Alb Kestrel Official
+ * https://www.youtube.com/@ALBKESTRELYTofficial
