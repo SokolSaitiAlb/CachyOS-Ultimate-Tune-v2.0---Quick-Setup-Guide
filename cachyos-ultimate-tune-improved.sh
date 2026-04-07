@@ -1,22 +1,11 @@
 #!/bin/bash
 #
-#  ████████╗██╗   ██╗██╗  ██╗███╗   ███╗ █████╗ ████████╗███████╗
-#  ╚══██╔══╝██║   ██║╚██╗██╔╝████╗ ████║██╔══██╗╚══██╔══╝██╔════╝
-#     ██║   ██║   ██║ ╚███╔╝ ██╔████╔██║███████║   ██║   █████╗
-#     ██║   ██║   ██║ ██╔██╗ ██║╚██╔╝██║██╔══██║   ██║   ██╔══╝
-#     ██║   ╚██████╔╝██╔╝ ██╗██║ ╚═╝ ██║██║  ██║   ██║   ███████╗
-#     ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
-#
-#  CachyOS ULTIMATE GAMING TUNER v2.7 (Tuxmate Refactor)
+#  CachyOS ULTIMATE GAMING TUNER v2.3
 #  Optimized for: RX 6800 + i5-12400F | Performance & DevOps Stack
+#  Author: Alb Kestrel (@ALBKESTRELYTofficial)
 # ---------------------------------------------------------------------------
 
 set -euo pipefail
-
-# Standardize Path and Security
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-export LC_ALL=C
-umask 077
 
 # ---------------------------------------------------------------------------
 #  Logging & Colors
@@ -38,89 +27,87 @@ warn()    { echo -e "${YELLOW}[!]${NC} $1" >&3; }
 error()   { echo -e "${RED}[x]${NC} $1" >&3; }
 
 # ---------------------------------------------------------------------------
-#  Core Functions
+#  1. Pre-Flight Checks (Locale & Permissions)
 # ---------------------------------------------------------------------------
-
-is_installed() { pacman -Qi "$1" &>/dev/null; }
-
-install_pkg() {
-    local name=$1 pkg=$2 cmd=$3
-    if is_installed "$pkg"; then
-        echo -e "${NC}  - $name (already present)" >&3
-        return 0
-    fi
-    info "Installing $name..."
-    if $cmd -S --needed --noconfirm "$pkg" >/dev/null 2>&1; then
-        success "$name installed."
-    else
-        error "Failed to install $name."
-    fi
-}
-
-# ---------------------------------------------------------------------------
-#  The Execution
-# ---------------------------------------------------------------------------
-
 [ "$EUID" -eq 0 ] && { error "Do not run as root."; exit 1; }
-
-info "Starting CachyOS Ultimate Tune v2.7..."
 sudo -v || exit 1
 
-# 1. AMD Performance Environment (The Core Logic)
-info "Applying AMD Performance Variables (NGGC + 12GB Cache)..."
-mkdir -p "$HOME/.config/environment.d"
-{
-    echo "MESA_SHADER_CACHE_MAX_SIZE=12G"
-    echo "RADV_PERFTEST=nggc" 
-} > "$HOME/.config/environment.d/gaming.conf"
+info "Step 1: Checking System Hygiene (Locales)..."
+if ! locale -a | grep -q "sq_AL.utf8"; then
+    warn "sq_AL locale missing. Fixing..."
+    echo "sq_AL.UTF-8 UTF-8" | sudo tee -a /etc/locale.gen > /dev/null
+    sudo locale-gen > /dev/null
+    success "Locales fixed."
+fi
 
-# 2. Kernel/Sysctl Tweaks
-info "Applying System Performance Tweaks..."
+# ---------------------------------------------------------------------------
+#  2. AUR Helper (yay) Installation
+# ---------------------------------------------------------------------------
+if ! command -v yay &> /dev/null; then
+    info "Installing yay (AUR Helper)..."
+    sudo pacman -S --needed --noconfirm git base-devel
+    git clone https://aur.archlinux.org/yay.git /tmp/yay
+    cd /tmp/yay && makepkg -si --noconfirm && cd -
+    rm -rf /tmp/yay
+fi
+
+# ---------------------------------------------------------------------------
+#  3. SDDM Pixel UI Theme Installation
+# ---------------------------------------------------------------------------
+info "Step 3: Installing Pixel UI SDDM Theme..."
+# Install dependencies for Qt6 themes
+sudo pacman -S --needed --noconfirm qt6-5compat qt6-declarative
+
+PIXEL_DIR="/usr/share/sddm/themes/sddm-pixel"
+if [ ! -d "$PIXEL_DIR" ]; then
+    tmp=$(mktemp -d)
+    git clone -b pixel https://github.com/mahaveergurjar/sddm.git "$tmp"
+    sudo mkdir -p "$PIXEL_DIR"
+    sudo cp -r "$tmp/"* "$PIXEL_DIR/"
+    
+    # Configure SDDM
+    sudo mkdir -p /etc/sddm.conf.d
+    echo -e "[Theme]\nCurrent=sddm-pixel" | sudo tee /etc/sddm.conf.d/theme.conf > /dev/null
+    success "SDDM Theme installed."
+    rm -rf "$tmp"
+fi
+
+# ---------------------------------------------------------------------------
+#  4. Package Deployment (The Massive Stack)
+# ---------------------------------------------------------------------------
+info "Step 4: Deploying Software Stack..."
+
+PKGS=(
+    # Browsers & Media
+    chromium brave-bin vlc audacity kdenlive obs-studio ffmpeg
+    # Gaming
+    lutris heroic-games-launcher-bin prismlauncher mangohud gamemode goverlay
+    # Productivity & Tools
+    libreoffice-fresh joplin-appimage logseq-desktop-bin calibre qbittorrent 
+    syncthing openrgb code fastfetch wget curl
+    # DevOps & Virtualization
+    openssh docker podman podman-desktop kubectl postman-bin virt-manager ollama
+)
+
+yay -S --needed --noconfirm "${PKGS[@]}"
+
+# ---------------------------------------------------------------------------
+#  5. System Performance Tweaks
+# ---------------------------------------------------------------------------
+info "Step 5: Applying Performance Tweaks (AMD + Sysctl)..."
+# AMD Shader Cache
+mkdir -p "$HOME/.config/environment.d"
+echo "MESA_SHADER_CACHE_MAX_SIZE=12G" > "$HOME/.config/environment.d/gaming.conf"
+echo "RADV_PERFTEST=nggc" >> "$HOME/.config/environment.d/gaming.conf"
+
+# Virtual Memory
 sudo tee /etc/sysctl.d/99-performance.conf > /dev/null << EOF
 vm.swappiness=10
 vm.max_map_count=2147483642
 EOF
 sudo sysctl -p /etc/sysctl.d/99-performance.conf
 
-# 3. SDDM Theme
-info "Configuring SDDM Theme..."
-PIXEL_DIR="/usr/share/sddm/themes/sddm-pixel-ui"
-if [ ! -d "$PIXEL_DIR" ]; then
-    sudo pacman -S --noconfirm git >/dev/null 2>&1
-    tmp=$(mktemp -d)
-    git clone -b pixel https://github.com/mahaveergurjar/sddm.git "$tmp" >/dev/null 2>&1
-    sudo mkdir -p "$PIXEL_DIR"
-    sudo cp -r "$tmp/"* "$PIXEL_DIR/"
-    echo -e "[Theme]\nCurrent=sddm-pixel-ui" | sudo tee /etc/sddm.conf.d/theme.conf > /dev/null
-    rm -rf "$tmp"
-fi
-
-# 4. Package Installation (Your New Stack)
-info "Deploying Applications..."
-
-# Graphics/Gaming
-install_pkg "Steam" "steam" "sudo pacman"
-install_pkg "MangoHud" "mangohud" "sudo pacman"
-install_pkg "GameMode" "gamemode" "sudo pacman"
-install_pkg "GOverlay" "goverlay" "sudo pacman"
-install_pkg "LACT" "lact-bin" "yay"
-install_pkg "VLC" "vlc" "sudo pacman"
-install_pkg "OBS Studio" "obs-studio" "sudo pacman"
-
-# DevOps & Tools
-install_pkg "Docker" "docker" "sudo pacman"
-install_pkg "Podman" "podman" "sudo pacman"
-install_pkg "kubectl" "kubectl" "sudo pacman"
-install_pkg "VS Code" "code" "sudo pacman"
-install_pkg "Kitty" "kitty" "sudo pacman"
-install_pkg "tmux" "tmux" "sudo pacman"
-install_pkg "Ollama" "ollama" "sudo pacman"
-
-# Browser/Work
-install_pkg "Brave" "brave-bin" "yay"
-install_pkg "LibreOffice" "libreoffice-fresh" "sudo pacman"
-
 # ---------------------------------------------------------------------------
-success "V2.7 REFACTOR COMPLETE."
-warn "Reboot immediately to apply all changes."
-echo -e "${NC}Detailed log: $LOG" >&3
+success "V2.3 INSTALLATION COMPLETE."
+warn "Please reboot to apply SDDM changes and Performance Tweaks."
+info "YouTube: Alb Kestrel (@ALBKESTRELYTofficial)"
