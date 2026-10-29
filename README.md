@@ -16,7 +16,7 @@ bash -n cachyos-ultimate-tune-improved.sh
 ### 1. Preview — nuk ndryshon sistemin
 
 ```bash
-./cachyos-ultimate-tune-improved.sh --dry-run
+bash cachyos-ultimate-tune-improved.sh --dry-run
 ```
 
 Pa argumente, skripti bën të njëjtin preview. Nuk nis `sudo`, pacman/yay ose shërbime në këtë mënyrë.
@@ -24,7 +24,7 @@ Pa argumente, skripti bën të njëjtin preview. Nuk nis `sudo`, pacman/yay ose 
 ### 2. Aplikim me konfirmim
 
 ```bash
-./cachyos-ultimate-tune-improved.sh --apply
+bash cachyos-ultimate-tune-improved.sh --apply
 ```
 
 Skripti refuzon ekzekutimin `--apply` si root, në mënyrë jo-interaktive dhe jashtë CachyOS. Para ndryshimeve, kërkon të shkruash saktësisht `APPLY` dhe ruan një kopje root-owned të skedarëve të konfigurimit që mund të ndryshojë nën:
@@ -38,7 +38,7 @@ Skripti zbulon nëse duket se përdoret Limine, GRUB apo systemd-boot, por **nuk
 Përdor direktorinë reale të krijuar gjatë aplikimit:
 
 ```bash
-./cachyos-ultimate-tune-improved.sh --rollback /var/lib/cachyos-ultimate-tune/backups/TIMESTAMP
+bash cachyos-ultimate-tune-improved.sh --rollback /var/lib/cachyos-ultimate-tune/backups/TIMESTAMP
 ```
 
 Rikthimi kërkon konfirmim `ROLLBACK`, kontrollon pronësinë/lejet e backup-it dhe rikthen skedarët e mbështetur nga arkivi. Pastaj rikarikon sysctl. **Nuk çinstalon automatikisht paketat** e instaluara nga pacman/yay; kontrolloji veçmas para heqjes.
