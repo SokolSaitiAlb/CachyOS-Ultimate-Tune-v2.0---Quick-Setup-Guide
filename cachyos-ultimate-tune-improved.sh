@@ -1,4 +1,5 @@
 #!/bin/bash
+if [[ "${1:-}" == "--rollback" ]]; then
 # Rollback helper: accepts only root-owned backups created under the fixed directory.
 set -euo pipefail
 if [[ "$#" -ne 2 || "$1" != "--rollback" ]]; then
@@ -33,6 +34,7 @@ done < <(sudo cat "$ROLLBACK_DIR/missing-targets")
 sudo sysctl --system
 echo "Rollback completed. Review the restored files and reboot/log out if settings require it."
 
+fi
 #!/bin/bash
 #
 #  CachyOS ULTIMATE GAMING TUNER v2.3
