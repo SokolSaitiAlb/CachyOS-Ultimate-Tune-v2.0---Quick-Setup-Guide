@@ -33,7 +33,7 @@ while IFS= read -r target; do
 done < <(sudo cat "$ROLLBACK_DIR/missing-targets")
 sudo sysctl --system
 echo "Rollback completed. Review the restored files and reboot/log out if settings require it."
-
+exit 0
 fi
 #!/bin/bash
 #
@@ -159,7 +159,7 @@ sudo -v || exit 1
 # the first mutation. The backup directory is root-owned to prevent tampering
 # with the archive before a privileged rollback.
 BACKUP_ROOT="/var/lib/cachyos-ultimate-tune/backups"
-BACKUP_DIR="$BACKUP_ROOT/$(date +%Y%m%d-%H%M%S)"
+BACKUP_DIR="$BACKUP_ROOT/$(date +%Y%m%d-%H%M%S)-$"
 sudo install -d -o root -g root -m 700 "$BACKUP_DIR"
 EXISTING_TMP="$(mktemp)"
 MISSING_TMP="$(mktemp)"
