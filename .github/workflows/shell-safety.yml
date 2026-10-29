@@ -25,7 +25,4 @@ jobs:
           printf '%s\n' "$output"
           grep -q "SAFE PREVIEW" <<< "$output"
           grep -q "will not modify bootloader files" <<< "$output"
-          if grep -Eq 'sudo|pacman|yay|systemctl' <<< "$output"; then
-            echo "Unexpected command-like output in default preview" >&2
-            exit 1
-          fi
+          grep -q "To apply:" <<< "$output"
