@@ -1,27 +1,66 @@
-# CachyOS Ultimate Gaming Tune v10.0 🚀
-An all-in-one automation script for CachyOS users, optimized for AMD performance (RX 6800) and a full DevOps engineering stack.
-## ✨ Key Features
- * **AMD Optimization:** NGGC enabled & 12GB Shader Cache configuration.
- * **DevOps Stack:** Docker (auto-group config), Podman, Kubernetes (kubectl), and Virt-Manager.
- * **AI Ready:** Ollama integration with automatic service enablement.
- * **Sleek UI:** Pixel UI SDDM Theme installation with Qt6 support.
- * **System Hygiene:** Automatic Locale fixing (sq_AL support) and AUR (yay) management.
- * 
-## 🚀 Quick Start
-Run the following command in your terminal:
+# CachyOS Ultimate Gaming Tune v10.0
+
+Automatizim opsional për CachyOS me paketa gaming/DevOps, temën SDDM Pixel UI dhe konfigurime të performancës. Skripti ka privilegje administrative, prandaj mënyra e parazgjedhur është **preview pa ndryshime**.
+
+## Përdorim i sigurt
+
+Mos ekzekuto një skript administrativ direkt nga `curl | bash`. Klonoje dhe inspektoje përpara ekzekutimit:
+
+```bash
+git clone https://github.com/SokolSaitiAlb/CachyOS-Ultimate-Tune-v2.0---Quick-Setup-Guide.git
+cd CachyOS-Ultimate-Tune-v2.0---Quick-Setup-Guide
+less cachyos-ultimate-tune-improved.sh
+bash -n cachyos-ultimate-tune-improved.sh
 ```
-curl -fsSL https://raw.githubusercontent.com/SokolSaitiAlb/CachyOS-Ultimate-Tune-v2.0---Quick-Setup-Guide/main/cachyos-ultimate-tune-improved.sh | bash
+
+### 1. Preview — nuk ndryshon sistemin
+
+```bash
+./cachyos-ultimate-tune-improved.sh --dry-run
 ```
-> **Note:** The script handles sudo prompts internally. Do NOT run the entire command as root/sudo to avoid AUR (yay) permission issues.
-> 
-## 🎨 SDDM Theme: Pixel UI
-Inspired by Pixel OS, this theme offers a minimalist design.
- * **Preview/Test:** sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/themes/sddm-pixel
- * **Requirements:** Script automatically installs qt6-5compat and qt6-declarative.
-## 📖 Documentation
- * Quick Start Guide
- * Troubleshooting & Issues
-## 📺 About the Author
-Created by **Alb Kestrel**. Follow for Linux gaming benchmarks and DevOps tutorials.
- * **YouTube:** Alb Kestrel Official
- * https://www.youtube.com/@ALBKESTRELYTofficial
+
+Pa argumente, skripti bën të njëjtin preview. Nuk nis `sudo`, pacman/yay ose shërbime në këtë mënyrë.
+
+### 2. Aplikim me konfirmim
+
+```bash
+./cachyos-ultimate-tune-improved.sh --apply
+```
+
+Skripti refuzon ekzekutimin `--apply` si root, në mënyrë jo-interaktive dhe jashtë CachyOS. Para ndryshimeve, kërkon të shkruash saktësisht `APPLY` dhe ruan një kopje root-owned të skedarëve të konfigurimit që mund të ndryshojë nën:
+
+`/var/lib/cachyos-ultimate-tune/backups/TIMESTAMP`
+
+Skripti zbulon nëse duket se përdoret Limine, GRUB apo systemd-boot, por **nuk ndryshon bootloader-in ose hyrjet e nisjes**. Kontrolli është informues; nëse zbulimi thotë unknown, kontrolloje vetë para aplikimit.
+
+### 3. Rikthim konfigurimesh
+
+Përdor direktorinë reale të krijuar gjatë aplikimit:
+
+```bash
+./cachyos-ultimate-tune-improved.sh --rollback /var/lib/cachyos-ultimate-tune/backups/TIMESTAMP
+```
+
+Rikthimi kërkon konfirmim `ROLLBACK`, kontrollon pronësinë/lejet e backup-it dhe rikthen skedarët e mbështetur nga arkivi. Pastaj rikarikon sysctl. **Nuk çinstalon automatikisht paketat** e instaluara nga pacman/yay; kontrolloji veçmas para heqjes.
+
+## Çfarë ndryshon aplikimi
+
+- Aktivizon locale `sq_AL.UTF-8` nëse mungon.
+- Instalon paketat e listuara për gaming, mjete DevOps dhe desktop.
+- Shkarkon temën e SDDM Pixel UI dhe e zgjedh në konfigurimin e SDDM.
+- Shkruan `~/.config/environment.d/gaming.conf`.
+- Shkruan dhe aplikon `/etc/sysctl.d/99-performance.conf`.
+
+Për të ulur rrezikun, skripti **nuk** e shton automatikisht përdoruesin në grupin `docker` (që jep privilegje praktikisht ekuivalente me root) dhe nuk e aktivizon automatikisht shërbimin Ollama. Paketat instalohen vetëm pas konfirmimit të qartë.
+
+## Kufizime të rëndësishme
+
+- Backup/rollback mbulon vetëm skedarët e konfigurimit të listuar nga skripti, jo çinstalimin e paketave ose çdo efekt anësor të sistemit.
+- Përpara ekzekutimit në sistemin kryesor, provoje në VM ose krijo një snapshot të plotë.
+- Mos e përdor në një shpërndarje tjetër pa auditim të veçantë.
+- Skripti nuk është mjet universal për “tuning”; çdo ndryshim i sysctl ose i SDDM duhet të vlerësohet për makinën konkrete.
+
+## Për autorin
+
+Alb Kestrel — Linux, CachyOS, gaming dhe automatizim DevOps.
+YouTube: https://www.youtube.com/@ALBKESTRELYTofficial
