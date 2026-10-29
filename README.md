@@ -1,6 +1,6 @@
 # CachyOS Ultimate Gaming Tune v10.0
 
-Automatizim opsional për CachyOS me paketa gaming/DevOps, temën SDDM Pixel UI dhe konfigurime të performancës. Skripti ka privilegje administrative, prandaj mënyra e parazgjedhur është **preview pa ndryshime**.
+Automatizim opsional për CachyOS me paketa gaming/DevOps dhe konfigurime të performancës. Instalimi i temës SDDM Pixel UI nga një branch i jashtëm i pa-pinuar është çaktivizuar. Skripti ka privilegje administrative, prandaj mënyra e parazgjedhur është **preview pa ndryshime**.
 
 ## Përdorim i sigurt
 
@@ -47,7 +47,7 @@ Rikthimi kërkon konfirmim `ROLLBACK`, kontrollon pronësinë/lejet e backup-it 
 
 - Aktivizon locale `sq_AL.UTF-8` nëse mungon.
 - Instalon paketat e listuara për gaming, mjete DevOps dhe desktop.
-- Shkarkon temën e SDDM Pixel UI dhe e zgjedh në konfigurimin e SDDM.
+- Nuk instalon automatikisht temë SDDM nga branch i jashtëm i pa-pinuar; inspekto dhe pin një commit të caktuar përpara instalimit manual.
 - Shkruan `~/.config/environment.d/gaming.conf`.
 - Shkruan dhe aplikon `/etc/sysctl.d/99-performance.conf`.
 

@@ -26,3 +26,10 @@ jobs:
           grep -q "SAFE PREVIEW" <<< "$output"
           grep -q "will not modify bootloader files" <<< "$output"
           grep -q "To apply:" <<< "$output"
+
+      - name: Reject unpinned system-wide SDDM theme cloning
+        run: |
+          if grep -q 'git clone -b pixel https://github.com/mahaveergurjar/sddm.git' cachyos-ultimate-tune-improved.sh; then
+            echo "Refusing unsafe unpinned system-wide theme installation" >&2
+            exit 1
+          fi
