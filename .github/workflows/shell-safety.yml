@@ -1,0 +1,31 @@
+name: Shell Safety Checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  shell-syntax-and-preview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Validate Bash syntax
+        run: bash -n cachyos-ultimate-tune-improved.sh
+      - name: Verify default preview is non-privileged
+        shell: bash
+        run: |
+          set -euo pipefail
+          output="$(bash cachyos-ultimate-tune-improved.sh --dry-run)"
+          printf '%s\n' "$output"
+          grep -q "SAFE PREVIEW" <<< "$output"
+          grep -q "will not modify bootloader files" <<< "$output"
+          if grep -Eq 'sudo|pacman|yay|systemctl' <<< "$output"; then
+            echo "Unexpected command-like output in default preview" >&2
+            exit 1
+          fi
