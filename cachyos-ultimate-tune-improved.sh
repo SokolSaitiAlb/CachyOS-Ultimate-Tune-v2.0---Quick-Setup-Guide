@@ -95,7 +95,7 @@ if [[ "$MODE" == "dry-run" ]]; then
     echo "Planned changes if you later run with --apply:"
     echo "  - Ensure the sq_AL.UTF-8 locale is enabled if missing."
     echo "  - Install yay if missing, then install the listed desktop, gaming and DevOps packages."
-    echo "  - Install the SDDM Pixel UI theme and select it in SDDM configuration."
+    echo "  - Leave SDDM theme unchanged; an unpinned remote theme will not be installed automatically."
     echo "  - Write MESA_SHADER_CACHE_MAX_SIZE/RADV_PERFTEST user environment settings."
     echo "  - Write /etc/sysctl.d/99-performance.conf and apply those sysctl values."
     echo "  - Create a root-owned backup of affected configuration files before changing them."
@@ -159,7 +159,7 @@ sudo -v || exit 1
 # the first mutation. The backup directory is root-owned to prevent tampering
 # with the archive before a privileged rollback.
 BACKUP_ROOT="/var/lib/cachyos-ultimate-tune/backups"
-BACKUP_DIR="$BACKUP_ROOT/$(date +%Y%m%d-%H%M%S)-$"
+BACKUP_DIR="$BACKUP_ROOT/$(date +%Y%m%d-%H%M%S)-$(date +%s%N)"
 sudo install -d -o root -g root -m 700 "$BACKUP_DIR"
 EXISTING_TMP="$(mktemp)"
 MISSING_TMP="$(mktemp)"
@@ -212,19 +212,8 @@ fi
 #  3. SDDM Theme
 # ---------------------------------------------------------------------------
 info "Step 3: SDDM Pixel UI Theme..."
-sudo pacman -S --needed --noconfirm qt6-5compat qt6-declarative
-
-PIXEL_DIR="/usr/share/sddm/themes/sddm-pixel"
-if [ ! -d "$PIXEL_DIR" ]; then
-    tmp=$(mktemp -d)
-    git clone -b pixel https://github.com/mahaveergurjar/sddm.git "$tmp"
-    sudo mkdir -p "$PIXEL_DIR"
-    sudo cp -r "$tmp/"* "$PIXEL_DIR/"
-    sudo mkdir -p /etc/sddm.conf.d
-    echo -e "[Theme]\nCurrent=sddm-pixel" | sudo tee /etc/sddm.conf.d/theme.conf > /dev/null
-    rm -rf "$tmp"
-fi
-
+warn "Automatic theme installation is disabled: the upstream pixel branch is not pinned or verified."
+warn "Review and pin a specific upstream commit manually before installing any theme system-wide."
 # ---------------------------------------------------------------------------
 #  4. Packages
 # ---------------------------------------------------------------------------
